@@ -36,7 +36,6 @@ namespace OfficeNotifications.Functions
                     services.AddAzureClients(builder =>
                     {
                         builder.AddServiceBusClient(config.ConnectionStrings.ServiceBus);
-                        builder.AddBlobServiceClient(config.ConnectionStrings.Storage);
                     });
                 })
                 .Build();

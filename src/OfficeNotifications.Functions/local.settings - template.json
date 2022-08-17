@@ -6,7 +6,6 @@
     "ServiceBusConnectionString": "<<SB NAMESPACE CONNECTION STRING>>"
   },
   "ConnectionStrings": {
-    "Storage": "",
     "ServiceBus": "<<SB QUEUE CONNECTION STRING>>",
     "Redis": ""
   },
@@ -18,8 +17,6 @@
     "CallbackPath": "/signin-oidc",
     "ClientSecret": ""
   },
-  "BlobContainerName": "files",
-  "SharePointSiteId": "",
   "WebhookUrlOverride": "",
   "AppInsightsInstrumentationKey": ""
 }

@@ -37,11 +37,31 @@ namespace OfficeNotifications.Engine
 
         #endregion
 
-        public async Task<IEnumerable<string>> GetNotifications(string userId)
+        public async Task<IEnumerable<UserNotification>> GetNotifications(string userId)
         {
             var db = redis.GetDatabase();
             var results = await db.ListRangeAsync(GetKey(userId), 0, -1);
-            return results.Where(r=> r.HasValue).Select(r => r.ToString());
+            var content = results.Where(r=> r.HasValue).Select(r => r.ToString());
+
+            var notifications = new List<UserNotification>();
+            foreach (var c in content)
+            {
+                try
+                {
+                    var n = JsonSerializer.Deserialize<UserNotification>(c);
+
+                    if (n != null)
+                    {
+                        notifications.Add(n);
+                    }
+                }
+                catch (JsonException)
+                {
+                    // Ignore
+                }
+            }
+
+            return notifications;
         }
 
         public async Task ClearNotifications(string userId)
@@ -171,7 +191,7 @@ namespace OfficeNotifications.Engine
 
         #region Private Functions
 
-        public (UserChatsWebhooksManager, UserEmailsWebhooksManager) GetUserEmailsWebhooksManagers(string userId)
+        (UserChatsWebhooksManager, UserEmailsWebhooksManager) GetUserEmailsWebhooksManagers(string userId)
         {
             if (!_userChatsWebhooksManagers.ContainsKey(userId))
             {
@@ -191,18 +211,18 @@ namespace OfficeNotifications.Engine
         private async Task ProcessEmail(ChangeNotificationForUserId notification, Message msg)
         {
             var from = msg.From?.EmailAddress?.Name ?? msg.From?.EmailAddress?.Address;
-            await AddNotification(notification.UserId, $"New email from '{from}'");
+            await AddNotification(notification.UserId, new UserNotification { Message = $"New email from '{from}'" });
         }
 
         private async Task ProcessChatMessage(ChangeNotificationForUserId notification, ChatMessage msg)
         {
-            await AddNotification(notification.UserId, $"New message from '{msg.From?.User?.DisplayName}'");
+            await AddNotification(notification.UserId, new UserNotification { Message = $"New message from '{msg.From?.User?.DisplayName}'" });
         }
 
-        private async Task AddNotification(string userId, string notification)
+        private async Task AddNotification(string userId, UserNotification notification)
         {
             var db = redis.GetDatabase();
-            await db.ListRightPushAsync(GetKey(userId), new RedisValue(notification));
+            await db.ListRightPushAsync(GetKey(userId), new RedisValue(JsonSerializer.Serialize(notification)));
         }
 
         private RedisKey GetKey(string userId)

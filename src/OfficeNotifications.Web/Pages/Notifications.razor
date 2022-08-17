@@ -5,6 +5,8 @@
 @using Microsoft.Graph
 @using OfficeNotifications.Engine
 @using Microsoft.Identity.Web
+@using OfficeNotifications.Engine.Models
+
 @inject Config Config
 @inject MicrosoftIdentityConsentAndConditionalAccessHandler ConsentHandler
 @inject Microsoft.Graph.GraphServiceClient GraphServiceClient
@@ -24,13 +26,13 @@ else
     <h1>Notifications for @user.DisplayName</h1>
 
     <p>Here's whats been happening in Teams/Outlook.</p>
-    <p>
-        URL to receive updates from Graph:
-        <input class="textbox" style="width: 500px;" disabled value="@Config.WebhookUrlOverride" />
-    </p>
 
     @if (!HaveValidNotificationSubscriptions)
     {
+        <p>
+            URL configured to receive updates from Graph:
+            <input class="textbox" style="width: 500px;" disabled value="@Config.WebhookUrlOverride" />
+        </p>
         <button class="btn btn-primary" @onclick="StartNotifications" disabled="@CreatingSubscriptions">Start Notification Collection</button>
     }
     else
@@ -44,7 +46,7 @@ else
             if (notifications.Count() == 0)
             {
                 <ul><li>No notifications for Teams or Outlook. When you get an email or Teams message, you'll see this change.</li></ul>
-                
+
             }
             else
             {
@@ -52,13 +54,15 @@ else
                     <thead>
                         <tr>
                             <th>Activity</th>
+                            <th>When</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var notification in notifications)
                         {
                             <tr>
-                                <td>@notification</td>
+                                <td>@notification.Message</td>
+                                <td>@notification.Received.ToString()</td>
                             </tr>
                         }
                     </tbody>
@@ -68,6 +72,10 @@ else
         }
 
         <h2>Active Subscriptions</h2>
+        <p>
+            URL configured to receive updates from Graph:
+            <input class="textbox" style="width: 500px;" disabled value="@Config.WebhookUrlOverride" />
+        </p>
         @if (Subscriptions.Count == 0)
         {
             <p>No subscriptions created with Graph API</p>
@@ -100,7 +108,7 @@ else
     }
 }
 @code {
-    IEnumerable<string>? notifications = null;
+    IEnumerable<UserNotification>? notifications = null;
     User? user;
     PeriodicTimer periodicTimer = new PeriodicTimer(TimeSpan.FromSeconds(5));
     UserNotificationsManager? NotificationManager = null;
