@@ -1,5 +1,7 @@
 # Office Notifications PoC
-Make your own Office 365 notifications and activity stream using webhooks to build your own user events list.
+Implement your own Office 365 notifications and activity streams from Office 365 events, using Graph webhooks. Don't like the default notifications system? Build your own version following this PoC.
+
+Here's a basic example - a page that updates with events relevant to the user as they happen:
 
 ![alt](imgs/feed.jpg)
 
@@ -76,7 +78,7 @@ This truncated version goes in local.settings.json:
 }
 ```
 # Testing
-Launch and login to the web-application. The first thing you need to do it activate notifcations - this will enable email & Teams webhooks for your user.
+Launch and login to the web-application. The first thing you need to do it activate notifcations with the "Start notifications collection" button - this will enable email & Teams webhooks for your user.
 Assuming the test worked (i.e. the configured URL responded to the Graph validation process and the right permissions are in place) you'll have x2 new active subscriptions.
 
 Now try sending an email to your user or starting a new chat with them. There's a timer that checks for new processed notifications every X seconds - wait until that runs, or just refresh the page.  
