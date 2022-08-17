@@ -13,7 +13,7 @@ namespace CommonUtils.Config
         }
 
         [ConfigValue]
-        public string Secret { get; set; } = string.Empty;
+        public string ClientSecret { get; set; } = string.Empty;
 
         [ConfigValue]
         public string ClientID { get; set; } = string.Empty;

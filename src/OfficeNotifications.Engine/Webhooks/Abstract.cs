@@ -29,7 +29,7 @@ namespace OfficeNotifications.Engine.Webhooks
         public static async Task<T> LoadFromKeyvault<T>(string certName, string userId, Config config, ILogger trace)
             where T : UserBaseWebhooksManager
         {
-            var cert = await AuthUtils.RetrieveKeyVaultCertificate(certName, config.AzureAdConfig.TenantId, config.AzureAdConfig.ClientID, config.AzureAdConfig.Secret, config.KeyVaultUrl);
+            var cert = await AuthUtils.RetrieveKeyVaultCertificate(certName, config.AzureAdConfig.TenantId, config.AzureAdConfig.ClientID, config.AzureAdConfig.ClientSecret, config.KeyVaultUrl);
             var instance = Activator.CreateInstance(typeof(T), new object[] { userId, cert, config, trace });
 
             return (T)instance!;

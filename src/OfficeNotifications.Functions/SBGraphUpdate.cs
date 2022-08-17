@@ -29,7 +29,7 @@ namespace OfficeNotifications.Functions
                 return;
             }
 
-            var contentDecryptingCert = await AuthUtils.RetrieveKeyVaultCertificate("webhooks", _config.AzureAdConfig.TenantId, _config.AzureAdConfig.ClientID, _config.AzureAdConfig.Secret, _config.KeyVaultUrl);
+            var contentDecryptingCert = await AuthUtils.RetrieveKeyVaultCertificate("webhooks", _config.AzureAdConfig.TenantId, _config.AzureAdConfig.ClientID, _config.AzureAdConfig.ClientSecret, _config.KeyVaultUrl);
             var notificationManager = new UserNotificationsManager(contentDecryptingCert, _config, _tracer);
             GraphNotification update = null;
             try

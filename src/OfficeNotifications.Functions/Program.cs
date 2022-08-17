@@ -17,6 +17,7 @@ namespace OfficeNotifications.Functions
                 {
                     c.AddEnvironmentVariables();
                     c.AddCommandLine(args);
+                    c.AddUserSecrets(System.Reflection.Assembly.GetEntryAssembly(), true);
                     c.SetBasePath(System.IO.Directory.GetCurrentDirectory())
                         .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true);
                     c.Build();

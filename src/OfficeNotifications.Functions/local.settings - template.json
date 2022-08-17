@@ -10,10 +10,14 @@
     "ServiceBus": "<<SB QUEUE CONNECTION STRING>>",
     "Redis": ""
   },
-  "AzureAd:TenantId": "",
-  "AzureAd:Domain": "",
-  "AzureAd:Secret": "",
-  "AzureAd:ClientID": "",
+  "AzureAd": {
+    "Instance": "https://login.microsoftonline.com/",
+    "Domain": "",
+    "TenantId": "",
+    "ClientId": "",
+    "CallbackPath": "/signin-oidc",
+    "ClientSecret": ""
+  },
   "BlobContainerName": "files",
   "SharePointSiteId": "",
   "WebhookUrlOverride": "",

@@ -31,7 +31,7 @@ namespace OfficeNotifications.Engine
 
         public async static Task<UserNotificationsManager> GetNotificationManager(string certName, Config config, ILogger trace)
         {
-            var cert = await AuthUtils.RetrieveKeyVaultCertificate(certName, config.AzureAdConfig.TenantId, config.AzureAdConfig.ClientID, config.AzureAdConfig.Secret, config.KeyVaultUrl);
+            var cert = await AuthUtils.RetrieveKeyVaultCertificate(certName, config.AzureAdConfig.TenantId, config.AzureAdConfig.ClientID, config.AzureAdConfig.ClientSecret, config.KeyVaultUrl);
             return new UserNotificationsManager(cert, config, trace);
         }
 

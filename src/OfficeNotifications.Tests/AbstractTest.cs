@@ -19,6 +19,7 @@ namespace OfficeNotifications.Tests
             var builder = new ConfigurationBuilder()
                 .SetBasePath(System.IO.Directory.GetCurrentDirectory())
                 .AddEnvironmentVariables()
+                .AddUserSecrets(System.Reflection.Assembly.GetExecutingAssembly(), true)
                 .AddJsonFile("appsettings.json", true);
 
             _tracer = LoggerFactory.Create(config =>
@@ -36,10 +37,8 @@ namespace OfficeNotifications.Tests
             };
             var scopes = new[] { "https://graph.microsoft.com/.default" };
 
-            var clientSecretCredential = new ClientSecretCredential(_config.AzureAdConfig.TenantId, _config.AzureAdConfig.ClientID, _config.AzureAdConfig.Secret, options);
+            var clientSecretCredential = new ClientSecretCredential(_config.AzureAdConfig.TenantId, _config.AzureAdConfig.ClientID, _config.AzureAdConfig.ClientSecret, options);
             _client = new GraphServiceClient(clientSecretCredential, scopes);
-
-
         }
     }
 }
